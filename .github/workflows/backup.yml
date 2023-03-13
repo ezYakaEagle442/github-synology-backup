@@ -14,6 +14,7 @@ env:
   # ==== General settings  ====
 
   GH_API: api.github.com
+  EXTRA_REPOS: ("develop" "main")
 
   # ==== repos ====:
 
@@ -63,7 +64,7 @@ jobs:
 
         # https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
         echo "GITHUB_REPOSITORY=${{github.repository}}"
-        echo "GITHUB_REPOSITORY_OWNER="${{github.repository.owner}}"
+        echo "GITHUB_REPOSITORY_OWNER="${{github.repository.owner}}
 
         echo "About to Backup repos using Scripts from  https://github.com/${{github.repository}} ..."
 
@@ -74,7 +75,12 @@ jobs:
           echo "Verifying repo $repo"
         done        
 
-        echo "All repositories have been listed"
+        echo "All repositories have been listed, now checking extra repos"
+
+        for repo in ${{ env.EXTRA_REPOS }}
+        do
+          echo "Verifying repo $repo"
+        done 
 
       shell: bash
       env:
