@@ -11,7 +11,7 @@ env:
 
   # ==== General settings  ====
 
-  GH_API: api.github.com/user
+  GH_API: api.github.com
 
   # ==== repos ====:
 
@@ -28,7 +28,8 @@ jobs:
       run: |
 
         echo "LOCAL_IP=$(curl whatismyip.akamai.com)" >> $GITHUB_ENV
-
+        echo "REP_API_URL=https://$GH_API:orgs/ORG/repos" >> $GITHUB_ENV
+        echo "USR_API_URL=https://$GH_API/user" >> $GITHUB_ENV
         echo "GH_WORKSPACE=${{ github.workspace }}" >> $GITHUB_ENV # "/github/workspace"
 
       shell: bash
@@ -37,20 +38,30 @@ jobs:
     - name: Set dependent environment variables
       run: |
 
-        echo "API_URL=https://$GH_API" >> $GITHUB_ENV
-
       shell: bash
 
     - name: Backup
       run: |
 
-        echo "checking all repos for User XXX ..."
-        curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.API_URL }}
+        gh_usr=($curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.USR_API_URL }} | jq .login)
         # curl -X GET -u username:${{ env.GHA_PAT }} -H "Accept: application/vnd.github.v3+json" ${{ env.API_URL }}
 
-        echo "About to Backup repos ..."
+        echo "checking all repos for User $gh_usr ..."
 
-        echo "All repositories have been listed, check at https://github.com/${{github.repository}}/"
+        # https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+        echo "GITHUB_REPOSITORY=${{github.repository}}"
+        echo "GITHUB_REPOSITORY_OWNER="${{github.repository.owner}}"
+
+        echo "About to Backup repos using Scripts from  https://github.com/${{github.repository}} ..."
+
+        curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.REP_API_URL }}
+
+        for repo in $(curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.REP_API_URL }})
+        do
+          echo "Verifying repo $repo"
+        done        
+
+        echo "All repositories have been listed"
 
       shell: bash
       env:
