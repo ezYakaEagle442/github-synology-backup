@@ -5,6 +5,8 @@ on:
 
 env:
   
+  # /!\ Variables in the env map cannot be defined in terms of other variables in the map
+
   # ==== Versions ====
 
   AZ_CLI_VERSION: 2.45.0
@@ -40,10 +42,21 @@ jobs:
 
       shell: bash
 
+    # Variables in the env map cannot be defined in terms of other variables in the map
+    - name: Display environment variables
+      run: |
+
+        echo "LOCAL_IP=$LOCAL_IP
+        echo "REP_API_URL=$REP_API_URL
+        echo "USR_API_URL=$USR_API_URL
+        echo "GH_WORKSPACE=$GH_WORKSPACE
+
+      shell: bash
+
     - name: Backup
       run: |
 
-        gh_usr=($curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.USR_API_URL }} | jq .login)
+        gh_usr=($curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.USR_API_URL }} | jq -r .login)
         # curl -X GET -u username:${{ env.GHA_PAT }} -H "Accept: application/vnd.github.v3+json" ${{ env.API_URL }}
 
         echo "checking all repos for User $gh_usr ..."
