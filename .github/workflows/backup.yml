@@ -56,7 +56,7 @@ jobs:
     - name: Backup
       run: |
 
-        gh_usr=($curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.USR_API_URL }} | jq -r .login)
+        gh_usr=$(curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.USR_API_URL }} | jq -r '.login')
         # curl -X GET -u username:${{ env.GHA_PAT }} -H "Accept: application/vnd.github.v3+json" ${{ env.API_URL }}
 
         echo "checking all repos for User $gh_usr ..."
