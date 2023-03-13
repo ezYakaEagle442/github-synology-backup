@@ -52,7 +52,7 @@ jobs:
         echo "GITHUB_REPOSITORY_OWNER="${{github.repository.owner}}
         echo "GITHUB_REPOSITORY_OWNER="${{github.repository.owner}} >> $GITHUB_ENV
 
-        echo "REP_API_URL=https://$GH_API:orgs/$gh_usr/repos" >> $GITHUB_ENV
+        echo "REP_API_URL=https://$GH_API/orgs/$gh_usr/repos" >> $GITHUB_ENV
 
       shell: bash
       env:
