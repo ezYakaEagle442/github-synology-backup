@@ -1,0 +1,58 @@
+name: Backup your GitHub repositories to Synology
+
+on:
+  workflow_dispatch:
+
+env:
+  
+  # ==== Versions ====
+
+  AZ_CLI_VERSION: 2.45.0
+
+  # ==== General settings  ====
+
+  GH_API: api.github.com/user
+
+  # ==== repos ====:
+
+
+  # ==== Secrets ====
+  GHA_PAT_SYN: ${{ secrets.GHA_PAT_SYN }}
+
+
+jobs:
+
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set Base environment variables
+      run: |
+
+        echo "LOCAL_IP=$(curl whatismyip.akamai.com)" >> $GITHUB_ENV
+
+        echo "GH_WORKSPACE=${{ github.workspace }}" >> $GITHUB_ENV # "/github/workspace"
+
+      shell: bash
+
+    # Variables in the env map cannot be defined in terms of other variables in the map
+    - name: Set dependent environment variables
+      run: |
+
+        echo "API_URL=https://$GH_API" >> $GITHUB_ENV
+
+      shell: bash
+
+    - name: Backup
+      run: |
+
+        echo "checking all repos for User XXX ..."
+        curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.API_URL }}
+        # curl -X GET -u username:${{ env.GHA_PAT }} -H "Accept: application/vnd.github.v3+json" ${{ env.API_URL }}
+
+        echo "About to Backup repos ..."
+
+        echo "All repositories have been listed, check at https://github.com/${{github.repository}}/"
+
+      shell: bash
+      env:
+        GHA_PAT: ${{ secrets.GHA_PAT_SYN }}
+
