@@ -31,7 +31,6 @@ jobs:
       run: |
 
         echo "LOCAL_IP=$(curl whatismyip.akamai.com)" >> $GITHUB_ENV
-        echo "REP_API_URL=https://$GH_API:orgs/ORG/repos" >> $GITHUB_ENV
         echo "USR_API_URL=https://$GH_API/user" >> $GITHUB_ENV
         echo "GH_WORKSPACE=${{ github.workspace }}" >> $GITHUB_ENV # "/github/workspace"
 
@@ -40,6 +39,17 @@ jobs:
     # Variables in the env map cannot be defined in terms of other variables in the map
     - name: Set dependent environment variables
       run: |
+
+        gh_usr=$(curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.USR_API_URL }} | jq -r '.login')
+        # curl -X GET -u username:${{ env.GHA_PAT }} -H "Accept: application/vnd.github.v3+json" ${{ env.API_URL }}
+
+        echo "checking all repos for User $gh_usr ..."
+
+        # https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
+        echo "GITHUB_REPOSITORY=${{github.repository}}"
+        echo "GITHUB_REPOSITORY_OWNER="${{github.repository.owner}}
+
+        echo "REP_API_URL=https://$GH_API:orgs/$gh_usr/repos" >> $GITHUB_ENV
 
       shell: bash
 
@@ -57,17 +67,9 @@ jobs:
     - name: Backup
       run: |
 
-        gh_usr=$(curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.USR_API_URL }} | jq -r '.login')
-        # curl -X GET -u username:${{ env.GHA_PAT }} -H "Accept: application/vnd.github.v3+json" ${{ env.API_URL }}
-
-        echo "checking all repos for User $gh_usr ..."
-
-        # https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
-        echo "GITHUB_REPOSITORY=${{github.repository}}"
-        echo "GITHUB_REPOSITORY_OWNER="${{github.repository.owner}}
-
         echo "About to Backup repos using Scripts from  https://github.com/${{github.repository}} ..."
 
+        # https://docs.github.com/en/rest/orgs/orgs?apiVersion=2022-11-28#list-organizations
         curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.REP_API_URL }}
 
         for repo in $(curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.REP_API_URL }})
