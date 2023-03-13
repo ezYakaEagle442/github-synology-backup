@@ -52,7 +52,9 @@ jobs:
         echo "REP_API_URL=https://$GH_API:orgs/$gh_usr/repos" >> $GITHUB_ENV
 
       shell: bash
-
+      env:
+        GHA_PAT: ${{ secrets.GHA_PAT_SYN }}
+        
     # Variables in the env map cannot be defined in terms of other variables in the map
     - name: Display environment variables
       run: |
