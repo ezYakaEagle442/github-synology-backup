@@ -44,22 +44,28 @@ jobs:
         # curl -X GET -u username:${{ env.GHA_PAT }} -H "Accept: application/vnd.github.v3+json" ${{ env.API_URL }}
 
         echo "checking all repos for User $gh_usr ..."
+         echo "GH_USR= $gh_usr" >> $GITHUB_ENV
 
         # https://docs.github.com/en/actions/learn-github-actions/variables#default-environment-variables
         echo "GITHUB_REPOSITORY=${{github.repository}}"
+        echo "GITHUB_REPOSITORY=${{github.repository}}" >> $GITHUB_ENV
         echo "GITHUB_REPOSITORY_OWNER="${{github.repository.owner}}
+        echo "GITHUB_REPOSITORY_OWNER="${{github.repository.owner}} >> $GITHUB_ENV
 
         echo "REP_API_URL=https://$GH_API:orgs/$gh_usr/repos" >> $GITHUB_ENV
 
       shell: bash
       env:
         GHA_PAT: ${{ secrets.GHA_PAT_SYN }}
-        
+
     # Variables in the env map cannot be defined in terms of other variables in the map
     - name: Display environment variables
       run: |
 
         echo "LOCAL_IP=$LOCAL_IP
+        echo "GH_USR=$GH_USR"
+        echo "GITHUB_REPOSITORY=$GITHUB_REPOSITORY"
+        echo "GITHUB_REPOSITORY_OWNER=$GITHUB_REPOSITORY_OWNER"
         echo "REP_API_URL=$REP_API_URL
         echo "USR_API_URL=$USR_API_URL
         echo "GH_WORKSPACE=$GH_WORKSPACE
