@@ -57,7 +57,7 @@ jobs:
 
         # https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#list-repositories-for-the-authenticated-user
         echo "RPO_API_URL=https://$GH_API/user/repos" >> $GITHUB_ENV
-        echo "USR_API_URL=https://$GH_API/users/$gh_usr/repos?per_page=100 >> $GITHUB_ENV #https://$GH_API/user"
+        echo "USR_API_URL=https://$GH_API/users/$gh_usr/repos?per_page=100" >> $GITHUB_ENV #https://$GH_API/user"
 
       shell: bash
       env:
