@@ -20,7 +20,6 @@ env:
   # ==== General settings  ====
 
   GH_API: api.github.com
-  # EXTRA_REPOS: ("develop" "main")
 
   # ==== Secrets ====
   GHA_PAT_SYN: ${{ secrets.GHA_PAT_SYN }}
@@ -43,7 +42,8 @@ jobs:
     - name: Set dependent environment variables
       run: |
 
-        gh_usr=$(curl -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" ${{ env.USR_API_URL }} | jq -r '.login')
+        USR_API_URL=https://:${{ env.GH_API }}/user
+        gh_usr=$(curl ${{ env.USR_API_URL }} -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" | jq -r '.login')
         # curl -X GET -u username:${{ env.GHA_PAT }} -H "Accept: application/vnd.github.v3+json" ${{ env.API_URL }}
 
         echo "checking all repos for User $gh_usr ..."
