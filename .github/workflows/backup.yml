@@ -78,9 +78,9 @@ jobs:
         
         echo "Verifying repos:"
         echo ""
-        for repo in ${{ env.EXTRA_REPOS }}
+        for repo in $repos
         do
-          echo "$repo"
+          echo $repo
         done
         echo ""
 
