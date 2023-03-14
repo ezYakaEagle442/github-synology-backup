@@ -42,7 +42,7 @@ jobs:
     - name: Set dependent environment variables
       run: |
 
-        USR_API_URL=https://:${{ env.GH_API }}/user
+        USR_API_URL=https://${{ env.GH_API }}/user
         gh_usr=$(curl ${{ env.USR_API_URL }} -H "Authorization: Bearer ${{ env.GHA_PAT }}" -H "Accept: application/vnd.github.v3+json" | jq -r '.login')
         # curl -X GET -u username:${{ env.GHA_PAT }} -H "Accept: application/vnd.github.v3+json" ${{ env.API_URL }}
 
