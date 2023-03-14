@@ -7,7 +7,7 @@ on:
         description: The List of extra repos
         required: false
         type: string
-        default:  "['repo1', 'foorepo']"
+        default:  "'repo1', 'foorepo'"
 
 env:
   
@@ -83,7 +83,7 @@ jobs:
           #repo_name=$($repo | jq -r '.name')
           echo "Verifying repo $repo"
         done 
-        
+
       shell: bash
 
     - name: Backup
