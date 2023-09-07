@@ -32,9 +32,16 @@ jobs:
     - name: Set Base environment variables
       run: |
 
-        echo "LOCAL_IP=$(curl whatismyip.akamai.com)" >> $GITHUB_ENV
         echo "GH_WORKSPACE=${{ github.workspace }}" >> $GITHUB_ENV # "/github/workspace"
         echo "EXTRA_REPOS=${{ inputs.extra_repos }}" >> $GITHUB_ENV
+
+        # ip addr show eth3 | grep inet
+        # ifconfig -a
+        # hostname -I
+        # host myip.opendns.com resolver1.opendns.com | grep "myip.opendns.com has address"
+        # myip=$(curl icanhazip.com)
+        # myip=$(dig +short myip.opendns.com @resolver1.opendns.com)      
+        echo "LOCAL_IP=$(curl whatismyip.akamai.com)" >> $GITHUB_ENV
 
       shell: bash
 
@@ -112,10 +119,9 @@ jobs:
         #  echo $repo
         #done    
         for index in ${!array[@]}; do
-          echo $((index+1))/${#array[@]} = "${array[index]}"
+          echo $((index+1))/${#array[@]} = "${array[index]}" | tr -d '\"'
+          #echo git@github.com:$GH_USR/"${repos[index]}" | tr -d '\"'
         done
-
-        echo "All repositories have been listed, now checking extra repos"
 
       shell: bash
       env:
