@@ -33,7 +33,7 @@ echo "LOCAL_IP:" $LOCAL_IP
 echo "GH_API:" $GH_API
 echo "USR_API_URL:" $USR_API_URL
 echo "GH_USR:" $GH_USR
-echo "GH_USR_ID:" $GH_USR_ID 
+echo "GH_USR_ID:" $GH_USR_ID
 echo "USR_REPO_API_URL:" $USR_REPO_API_URL
 echo "ORG_REPO_API_URL:" $ORG_REPO_API_URL
 echo "GH_WORKSPACE:" $GH_WORKSPACE
@@ -74,7 +74,8 @@ echo ""
 for index in ${!repos[@]}
     do
         echo $((index+1))/${#repos[@]} = "${repos[index]}"
-        git clone git@github.com:$GH_USR/"${repos[index]}"
+        # git clone git@github.com:$GH_USR/"${repos[index]}"
+        git clone https://github.com/$GH_USR/${repos[index]}
     done
 
 echo ""
